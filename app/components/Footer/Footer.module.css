@@ -1,0 +1,18 @@
+.footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--spsk1Main7);
+	color: var(--spsk1Main5);
+	padding: 1rem 5rem;
+}
+
+.link {
+	text-decoration: none;
+	color: var(--spsk1Main5);
+	transition: color 0.3s;
+}
+
+.link:hover {
+	color: var(--spsk1Main3);
+}

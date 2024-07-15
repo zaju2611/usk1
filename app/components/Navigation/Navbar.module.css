@@ -1,0 +1,13 @@
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--spsk1Main7);
+	color: var(--spsk1Main5);
+	padding: 1rem 5rem;
+}
+
+.text {
+	font-weight: bold;
+	font-size: 1.7rem;
+}

@@ -1,14 +1,15 @@
-import './globals.css'
+import "./globals.css";
 
 export const metadata = {
-  title: 'NextJS Course App',
-  description: 'Your first NextJS app!',
+	title: "Generate referral App",
+	description:
+		"Application for generating referrals for paid examinations at usk1 in Lublin",
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
+	return (
+		<html lang="pl">
+			<body>{children}</body>
+		</html>
+	);
 }

@@ -1,9 +1,24 @@
+import Link from "next/link";
+import Footer from "./components/Footer/Footer";
+import Navbar from "./components/Navigation/Navbar";
+
 export default function Home() {
-  return (
-    <main>
-      <img src="/logo.png" alt="A server surrounded by magic sparkles." />
-      <h1>Welcome to this NextJS Course!</h1>
-      <p>🔥 Let&apos;s get started! 🔥</p>
-    </main>
-  );
+	return (
+		<div className="container">
+			<nav>
+				<Navbar />
+			</nav>
+			<main className="central main">
+				<Link href="/testGenerator" legacyBehavior>
+					<a className="button">Generuj skierowanie</a>
+				</Link>
+				<Link href="/prices" legacyBehavior>
+					<a className="button">Cennik</a>
+				</Link>
+			</main>
+			<footer>
+				<Footer />
+			</footer>
+		</div>
+	);
 }
