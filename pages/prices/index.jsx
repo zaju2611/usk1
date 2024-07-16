@@ -12,7 +12,7 @@ export default function Prices({ tests }) {
 }
 
 export async function getServerSideProps() {
-	const res = await fetch("http://localhost:3000/api/tests");
+	const res = await fetch("http://localhost:3001/api/tests");
 	const data = await res.json();
 
 	return {
