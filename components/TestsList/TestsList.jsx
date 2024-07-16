@@ -1,5 +1,3 @@
-import { getTests } from "../../api/tests";
-
 function TestsList({ tests }) {
 	return (
 		<ul>
@@ -10,15 +8,6 @@ function TestsList({ tests }) {
 			))}
 		</ul>
 	);
-}
-
-export async function getServerSideProps() {
-	const tests = await getTests();
-	return {
-		props: {
-			tests,
-		},
-	};
 }
 
 export default TestsList;

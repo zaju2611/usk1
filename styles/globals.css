@@ -23,9 +23,9 @@ html {
 }
 
 .container {
+	height: 100vh;
 	display: flex;
 	flex-direction: column;
-	min-height: 100vh;
 }
 
 body {
@@ -35,20 +35,12 @@ body {
 	color: black;
 }
 
-main {
-	text-align: center;
-}
-
-.central {
-	display: flex;
+.main {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
-}
-
-.main {
-	flex-direction: row;
 }
 
 .button {
@@ -67,4 +59,8 @@ main {
 
 .button:hover {
 	background-color: var(--spsk1Main3);
+}
+
+.row-btn {
+	flex-direction: row;
 }
