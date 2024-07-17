@@ -4,7 +4,7 @@ export default function Prices({ tests }) {
 	return (
 		<div>
 			<div className="central">
-				<h1>Prices</h1>
+				<h1>Cennik badań</h1>
 				<Tests tests={tests} />
 			</div>
 		</div>
@@ -12,7 +12,7 @@ export default function Prices({ tests }) {
 }
 
 export async function getServerSideProps() {
-	const res = await fetch("http://localhost:3001/api/tests");
+	const res = await fetch("http://localhost:3000/api/tests");
 	const data = await res.json();
 
 	return {
