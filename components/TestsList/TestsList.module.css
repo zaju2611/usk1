@@ -29,6 +29,7 @@
 	padding: 10px;
 }
 
-.testName {
+.colName {
+	min-width: 625px;
 	text-align: left;
 }
