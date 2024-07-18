@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Select from "react-select";
+import Form from "../../components/Form/Form";
 
 export default function TestGenerator({ tests }) {
 	const [formData, setFormData] = useState({
@@ -36,66 +36,15 @@ export default function TestGenerator({ tests }) {
 
 	return (
 		<div>
-			<div className="central">
+			<div>
 				<h1>Generator skierowań</h1>
-				<form onSubmit={handleSubmit}>
-					<div>
-						<label htmlFor="firstName">Imię</label>
-						<input
-							type="text"
-							id="firstName"
-							name="firstName"
-							value={formData.firstName}
-							onChange={handleChange}
-							required
-						/>
-					</div>
-					<div>
-						<label htmlFor="lastName">Nazwisko</label>
-						<input
-							type="text"
-							id="lastName"
-							name="lastName"
-							value={formData.lastName}
-							onChange={handleChange}
-							required
-						/>
-					</div>
-					<div>
-						<label htmlFor="pesel">Pesel</label>
-						<input
-							type="text"
-							id="pesel"
-							name="pesel"
-							value={formData.pesel}
-							onChange={handleChange}
-							required
-						/>
-					</div>
-					<div>
-						<label htmlFor="phoneNumber">Numer telefonu</label>
-						<input
-							type="text"
-							id="phoneNumber"
-							name="phoneNumber"
-							value={formData.phoneNumber}
-							onChange={handleChange}
-							required
-						/>
-					</div>
-					<div>
-						<label htmlFor="tests">Wybierz badania</label>
-						<Select
-							id="tests"
-							name="tests"
-							options={availableTests}
-							isMulti
-							onChange={handleTestChange}
-							placeholder="Wybierz badanie"
-						/>
-					</div>
-					<button type="submit">Generuj</button>
-				</form>
+				<Form
+					formData={formData}
+					handleChange={handleChange}
+					handleTestChange={handleTestChange}
+					handleSubmit={handleSubmit}
+					availableTests={availableTests}
+				/>
 			</div>
 		</div>
 	);

@@ -3,7 +3,7 @@ import Tests from "../../components/TestsList/TestsList";
 export default function Prices({ tests }) {
 	return (
 		<div>
-			<div className="central">
+			<div className>
 				<h1>Cennik badań</h1>
 				<Tests tests={tests} />
 			</div>

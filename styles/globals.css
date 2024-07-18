@@ -65,3 +65,7 @@ body {
 .row-btn {
 	flex-direction: row;
 }
+
+h1 {
+	margin: 3rem;
+}

@@ -1,0 +1,61 @@
+.form {
+	width: 100%;
+	max-width: 500px;
+	border-collapse: collapse;
+	margin-bottom: 3rem;
+}
+
+.formGroup {
+	margin-bottom: 1rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.formGroup label {
+	width: 140px;
+	margin: 0.5rem;
+	font-weight: bold;
+}
+
+.formGroup input,
+.formGroup .react-select__control {
+	flex-grow: 1;
+	width: 300px;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.formGroup .react-select__control {
+	height: 38px;
+	width: 300px;
+}
+
+.formGroup input:focus,
+.formGroup .react-select__control--is-focused {
+	border-color: #0056b3;
+	outline: none;
+}
+
+.buttonContainer {
+	display: flex;
+	justify-content: center;
+}
+
+.submitButton {
+	width: 100px;
+	padding: 10px;
+	background-color: var(--spsk1Main4);
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background-color 0.3s;
+	margin-top: 2rem;
+}
+
+.submitButton:hover {
+	background-color: var(--spsk1MainHover2);
+}
