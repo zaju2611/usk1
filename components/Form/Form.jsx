@@ -550,12 +550,12 @@ const reffelsTests = [
 		category: "Markery chorób zakaźnych",
 	},
 	{
-		label: "Wolne lekkie łańcuchyu Kappa",
+		label: "Wolne lekkie łańcuchy Kappa",
 		value: "Wolne lekkie łańcuchy Kappa",
 		category: "Białka specyficzne",
 	},
 	{
-		label: "Wolne lekkie łańcuchyu Lambda",
+		label: "Wolne lekkie łańcuchy Lambda",
 		value: "Wolne lekkie łańcuchy Lambda",
 		category: "Białka specyficzne",
 	},
@@ -632,22 +632,22 @@ const reffelsTests = [
 	{
 		label: "Sód - mocz",
 		value: "Sód DZM",
-		category: "Badania biochemiczne",
+		category: "Badania biochemiczne moczu",
 	},
 	{
 		label: "Potas - mocz",
 		value: "Potas DZM",
-		category: "Badania biochemiczne",
+		category: "Badania biochemiczne moczu",
 	},
 	{
 		label: "Mocznik - mocz",
 		value: "Mocznik DZM",
-		category: "Badania biochemiczne",
+		category: "Badania biochemiczne moczu",
 	},
 	{
 		label: "Kreatynina - mocz",
 		value: "Kreatynina DZM",
-		category: "Badania biochemiczne",
+		category: "Badania biochemiczne moczu",
 	},
 ];
 
@@ -695,7 +695,7 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 		const page = pdfDoc.addPage([595.28, 841.89]);
 		page.setFont(customFont);
 
-		page.setFontSize(7);
+		page.setFontSize(8);
 
 		const startX = 30; // Początkowa pozycja X
 		const startY = 520; // Początkowa pozycja Y
@@ -703,10 +703,23 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 		const padding = 135; // Odstęp między kolumnami
 		const rowHeight = 10; // Wysokość wiersza
 		const columnWidth = padding + boxSize; // Szerokość kolumny (szersza, aby uwzględnić tekst)
-		const minY = 50; // Minimalna wartość Y dla przejścia do nowej kolumny
+		const minY = 60; // Minimalna wartość Y dla przejścia do nowej kolumny
 
 		let x = startX;
 		let y = startY;
+
+		// Funkcja grupująca testy według kategorii
+		const groupTestsByCategory = (tests) => {
+			return tests.reduce((groups, test) => {
+				if (!groups[test.category]) {
+					groups[test.category] = [];
+				}
+				groups[test.category].push(test);
+				return groups;
+			}, {});
+		};
+
+		const groupedTests = groupTestsByCategory(reffelsTests);
 
 		const wrapText = (text, maxWidth) => {
 			let lines = [];
@@ -714,7 +727,7 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 
 			text.split(" ").forEach((word) => {
 				const testLine = currentLine + (currentLine ? " " : "") + word;
-				const testLineWidth = customFont.widthOfTextAtSize(testLine, 7);
+				const testLineWidth = customFont.widthOfTextAtSize(testLine, 8);
 
 				if (testLineWidth > maxWidth) {
 					lines.push(currentLine);
@@ -729,48 +742,68 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 			return lines;
 		};
 
-		reffelsTests.forEach((test, index) => {
-			const textLines = wrapText(test.label, columnWidth - boxSize - 10);
+		Object.keys(groupedTests).forEach((category) => {
+			// Dodaj nagłówek kategorii
+			if (y - boxSize < minY) {
+				x += columnWidth;
+				y = startY;
+			} else {
+				if (category === "Badania hematologiczne") {
+					y = startY;
+				} else {
+					y -= rowHeight + 5; // Większy margines przed nagłówkiem
+				}
+			}
 
-			textLines.forEach((line, lineIndex) => {
-				// Sprawdź, czy tekst zmieści się w aktualnej kolumnie
-				if (y - boxSize < minY) {
-					// Przejdź do nowej kolumny
+			page.drawText(category.toUpperCase(), {
+				x: x,
+				y: y - boxSize / 2 - 2,
+				size: 8,
+				font: customFont,
+				color: rgb(0, 0, 0),
+			});
+
+			y -= rowHeight + 5;
+
+			groupedTests[category].forEach((test) => {
+				const textLines = wrapText(test.label, columnWidth - boxSize - 10);
+
+				textLines.forEach((line, lineIndex) => {
+					if (y - boxSize < minY) {
+						x += columnWidth;
+						y = startY;
+					}
+
+					// Rysuj kwadracik
+					page.drawRectangle({
+						x: x,
+						y: y - boxSize,
+						width: boxSize,
+						height: boxSize,
+						borderColor: rgb(0, 0, 0),
+						borderWidth: 1,
+						color: selectedTests.some((t) => t.value === test.value)
+							? rgb(0, 0, 0)
+							: rgb(1, 1, 1),
+					});
+
+					// Rysuj tekst
+					page.drawText(line, {
+						x: x + boxSize + 5,
+						y: y - boxSize / 2 - 2 - lineIndex * 7,
+						color: rgb(0, 0, 0),
+					});
+
+					if (lineIndex === textLines.length - 1) {
+						y -= rowHeight * (textLines.length || 1) + 1;
+					}
+				});
+
+				if (y < minY) {
 					x += columnWidth;
 					y = startY;
 				}
-
-				// Rysuj kwadracik
-				page.drawRectangle({
-					x: x,
-					y: y - boxSize,
-					width: boxSize,
-					height: boxSize,
-					borderColor: rgb(0, 0, 0),
-					borderWidth: 1,
-					color: selectedTests.some((t) => t.value === test.value)
-						? rgb(0, 0, 0)
-						: rgb(1, 1, 1),
-				});
-
-				// Rysuj tekst w odpowiedniej linii
-				page.drawText(line, {
-					x: x + boxSize + 5,
-					y: y - boxSize / 2 - 2 - lineIndex * 7, // Dostosuj wysokość linii, jeśli jest zbyt duża
-					color: rgb(0, 0, 0),
-				});
-
-				// Zaktualizuj pozycję `y` tylko po narysowaniu wszystkich linii tekstu dla danego testu
-				if (lineIndex === textLines.length - 1) {
-					y -= rowHeight * (textLines.length || 1);
-				}
 			});
-
-			// Jeśli potrzebujesz przejść do nowej kolumny
-			if (y < minY) {
-				x += columnWidth;
-				y = startY;
-			}
 		});
 
 		page.setFontSize(11);
@@ -863,28 +896,28 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 			color: rgb(0, 0, 0),
 		});
 
-		page.drawRectangle({
-			x: 70,
-			y: 655,
-			width: 9,
-			height: 9,
-			borderColor: rgb(0, 0, 0),
-			borderWidth: 1,
-		});
+		const drawSquare = (page, x, y, filled) => {
+			page.drawRectangle({
+				x: x,
+				y: y,
+				width: 9,
+				height: 9,
+				borderColor: rgb(0, 0, 0),
+				borderWidth: 1,
+				color: filled ? rgb(0, 0, 0) : rgb(1, 1, 1), // Wypełnij kwadrat, jeśli 'filled' jest true
+			});
+		};
+
+		drawSquare(page, 70, 655, isEven);
+
 		page.drawText("K", {
 			x: 82,
 			y: 660,
 			color: rgb(0, 0, 0),
 		});
 
-		page.drawRectangle({
-			x: 100,
-			y: 655,
-			width: 9,
-			height: 9,
-			borderColor: rgb(0, 0, 0),
-			borderWidth: 1,
-		});
+		drawSquare(page, 100, 655, !isEven);
+
 		page.drawText("M", {
 			x: 112,
 			y: 660,
@@ -948,36 +981,45 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 			"Podpis osoby pobierającej materiał: ................................................................",
 			{
 				x: 30,
-				y: 585,
+				y: 565,
 				color: rgb(0, 0, 0),
 			}
 		);
 		const currentDate = getCurrentDate();
 		page.drawText(`Data wystawienia skierowania: ${currentDate}`, {
 			x: 400,
-			y: 585,
+			y: 565,
 			color: rgb(0, 0, 0),
 		});
-		// page.drawText("Wybrane badania:", {
-		// 	x: 30,
-		// 	y: 620,
-		// 	color: rgb(0, 0, 0),
-		// });
 
-		// selectedTests.forEach((test, index) => {
-		// 	page.drawText(`- ${test.label}`, {
-		// 		x: 70,
-		// 		y: 600 - index * 20,
-		// 		color: rgb(0, 0, 0),
-		// 	});
-		// });
+		page.setFontSize(11);
+		page.drawText("Ilość zleconych badań", {
+			x: 450,
+			y: 85,
+			color: rgb(0, 0, 0),
+		});
+		page.setFontSize(16);
+		page.drawText(`${formData.selectedTests.length}`, {
+			x: 500,
+			y: 57,
+			color: rgb(0, 0, 0),
+		});
+
+		page.drawRectangle({
+			x: 485,
+			y: 50,
+			width: 40,
+			height: 25,
+			borderColor: rgb(0, 0, 0),
+			borderWidth: 1,
+		});
 
 		const pdfBytes = await pdfDoc.save();
 		const blob = new Blob([pdfBytes], { type: "application/pdf" });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = "form.pdf";
+		a.download = `${formData.firstName}_${formData.lastName}_skierowanie.pdf`;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
