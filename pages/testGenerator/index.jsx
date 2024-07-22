@@ -24,11 +24,6 @@ export default function TestGenerator({ tests }) {
 		}));
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		console.log("Form data", formData);
-	};
-
 	const availableTests = tests.map((test) => ({
 		value: test.name,
 		label: test.name,
@@ -42,7 +37,6 @@ export default function TestGenerator({ tests }) {
 					formData={formData}
 					handleChange={handleChange}
 					handleTestChange={handleTestChange}
-					handleSubmit={handleSubmit}
 					availableTests={availableTests}
 				/>
 			</div>
