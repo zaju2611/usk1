@@ -319,7 +319,7 @@ const generatePDF = async (
 	);
 	page.drawText("w SPSK1 w Lublinie", { x: 400, y: 695, color: rgb(0, 0, 0) });
 	page.setFontSize(FONT_SIZE_TINY);
-	page.drawText("podpis pacjenta", { x: 416, y: 685, color: rgb(0, 0, 0) });
+	page.drawText("podpis pacjenta", { x: 413, y: 685, color: rgb(0, 0, 0) });
 	page.setFontSize(FONT_SIZE_SMALL);
 	page.drawText("Oddział szpitalny/tel. do pacjenta/adres", {
 		x: 30,
@@ -371,6 +371,371 @@ const generatePDF = async (
 		borderWidth: 1,
 	});
 
+	const secondPage = pdfDoc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+	secondPage.setFont(customFont);
+	secondPage.setFontSize(FONT_SIZE_MEDIUM);
+
+	secondPage.drawText("Dział Diagnostyki Laboratoryjnej USK Nr 1", {
+		x: 30,
+		y: 810,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("20-841 Lublin ul. Al. Solidarności 8", {
+		x: 30,
+		y: 795,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("(wejście od ul. Staszica 16)", {
+		x: 30,
+		y: 780,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("tel. (81)-532-38-16", {
+		x: 30,
+		y: 765,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("Upoważnienie do dobioru wyników badań.", {
+		x: 30,
+		y: 740,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText(`Pacjent: ${formData.firstName} ${formData.lastName}`, {
+		x: 30,
+		y: 720,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText(`PESEL: ${formData.pesel}`, {
+		x: 30,
+		y: 705,
+		color: rgb(0, 0, 0),
+	});
+
+	const drawWrappedText = (
+		page,
+		text,
+		x,
+		y,
+		maxWidth,
+		font,
+		size,
+		lineHeight,
+		color
+	) => {
+		const lines = wrapText(text, font, maxWidth, size);
+		lines.forEach((line, index) => {
+			page.drawText(line, {
+				x: x,
+				y: y - index * lineHeight,
+				size: size,
+				color: color,
+			});
+		});
+		return y - lines.length * lineHeight;
+	};
+
+	let currentY = 690;
+
+	const formatTestNames = (tests) => {
+		return tests.map((test) => test.value).join(", ");
+	};
+
+	const formattedTestNames = formatTestNames(formData.selectedTests);
+
+	currentY = drawWrappedText(
+		secondPage,
+		`Badania: ${formattedTestNames}`,
+		30,
+		currentY,
+		250,
+		customFont,
+		FONT_SIZE_MEDIUM,
+		15,
+		rgb(0, 0, 0)
+	);
+
+	currentY -= 30; // Add some space after the wrapped text
+
+	secondPage.drawText(`Data: `, {
+		x: 30,
+		y: currentY,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText(`Podpis os. pobierającej: `, {
+		x: 160,
+		y: currentY,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText(`${getCurrentDate()}`, {
+		x: 30,
+		y: currentY - 15,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText(`............................................`, {
+		x: 160,
+		y: currentY - 15,
+		color: rgb(0, 0, 0),
+	});
+	currentY -= 45; // Space for the date and signature lines
+
+	secondPage.drawText("Wyniki badań odbierane są w laboratorium po", {
+		x: 30,
+		y: currentY,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("Okazaniu dowodu osobistego i dokumentu", {
+		x: 30,
+		y: currentY - 15,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("zapłaty", {
+		x: 30,
+		y: currentY - 30,
+		color: rgb(0, 0, 0),
+	});
+
+	// Rysowanie nagłówków tabeli
+	drawTextCentered(
+		secondPage,
+		"Badania odpłatne wykonywane w",
+		customFont,
+		FONT_SIZE_MEDIUM,
+		400
+	);
+	drawTextCentered(
+		secondPage,
+		"Dziale Diagnostyki Laboratoryjnej SPSK 1 w Lublinie",
+		customFont,
+		FONT_SIZE_MEDIUM,
+		380
+	);
+
+	secondPage.drawRectangle({
+		x: 30,
+		y: 360,
+		width: PAGE_WIDTH - 60,
+		height: 60,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawText("Lp.", {
+		x: 35,
+		y: 345,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("Imię i Nazwisko Pacjenta", {
+		x: 75,
+		y: 345,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText("Kwota badania", {
+		x: 470,
+		y: 345,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawRectangle({
+		x: 30,
+		y: 335,
+		width: 30,
+		height: 25,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 60,
+		y: 335,
+		width: 400,
+		height: 25,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 460,
+		y: 335,
+		width: PAGE_WIDTH - 490,
+		height: 25,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 30,
+		y: 310,
+		width: 30,
+		height: 25,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 60,
+		y: 310,
+		width: 400,
+		height: 25,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 460,
+		y: 310,
+		width: PAGE_WIDTH - 490,
+		height: 25,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+
+	secondPage.drawText(`${formData.firstName} ${formData.lastName}`, {
+		x: 75,
+		y: 318,
+		color: rgb(0, 0, 0),
+	});
+
+	const hasSampleCollection = Object.values(formData.selectedTests).some(
+		(test) => test.value === "Pobranie materiału"
+	);
+
+	// Determine the header text
+	const headerText = hasSampleCollection ? "+ 6 zł pobranie" : "";
+
+	// Draw the header text with the appropriate fee information
+	secondPage.drawText(headerText, {
+		x: 465,
+		y: 320,
+		color: rgb(0, 0, 0),
+	});
+
+	const categories = [
+		{ name: "Badania hematologiczne", price: 0 },
+		{ name: "Hemostaza (osocze cytrynianowe)", price: 0 },
+		{ name: "Analityka ogólna", price: 0 },
+		{ name: "Chemia kliniczna (surowica)", price: 0 },
+		{ name: "Chemia kliniczna (mocz)", price: 0 },
+		{ name: "Immunochemia (surowica)", price: 0 },
+		{ name: "Markery chorób zakaźnych", price: 0 },
+		{ name: "Immunochemia (osocze wersenianowe)", price: 0 },
+		{ name: "Immunochemia (krew pełna wersenianowa)", price: 0 },
+		{ name: "Białka specyficzne", price: 0 },
+		{ name: "Narkotyki w moczu", price: 0 },
+	];
+
+	// Create a map from categories
+	const categoryPriceMap = categories.reduce((map, category) => {
+		map[category.name] = category.price;
+		return map;
+	}, {});
+
+	// Initialize categoryTotals with all categories, setting their prices to 0
+	const categoryTotals = categories.reduce((totals, category) => {
+		totals[category.name] = 0;
+		return totals;
+	}, {});
+
+	// Update categoryTotals based on selectedTests
+	formData.selectedTests.forEach((test) => {
+		const categoryName = test.type;
+		const price = test.price;
+
+		if (categoryPriceMap.hasOwnProperty(categoryName)) {
+			categoryTotals[categoryName] += price;
+		}
+	});
+
+	console.log(categoryTotals); // Output the updated totals
+	const ROW_TABLE_WIDTH = 20;
+	const INITIAL_Y = 325;
+	let currentTableY = INITIAL_Y - ROW_TABLE_WIDTH - ROW_TABLE_WIDTH; // Adjust to start below the header
+
+	Object.entries(categoryTotals).forEach(
+		([categoryName, totalPrice], index) => {
+			// Draw row content
+			secondPage.drawText((index + 1).toString(), {
+				x: 40,
+				y: currentTableY + 10,
+				color: rgb(0, 0, 0),
+			});
+			secondPage.drawText(categoryName, {
+				x: 75,
+				y: currentTableY + 10,
+				color: rgb(0, 0, 0),
+			});
+			secondPage.drawText(totalPrice.toFixed(2), {
+				x: 470,
+				y: currentTableY + 10,
+				color: rgb(0, 0, 0),
+			});
+
+			// Draw row borders
+			secondPage.drawRectangle({
+				x: 30,
+				y: currentTableY + 5,
+				width: 30,
+				height: ROW_TABLE_WIDTH,
+				borderColor: rgb(0, 0, 0),
+				borderWidth: 1,
+			});
+			secondPage.drawRectangle({
+				x: 60,
+				y: currentTableY + 5,
+				width: 400,
+				height: ROW_TABLE_WIDTH,
+				borderColor: rgb(0, 0, 0),
+				borderWidth: 1,
+			});
+			secondPage.drawRectangle({
+				x: 460,
+				y: currentTableY + 5,
+				width: PAGE_WIDTH - 490,
+				height: ROW_TABLE_WIDTH,
+				borderColor: rgb(0, 0, 0),
+				borderWidth: 1,
+			});
+
+			// Move to the next row
+			currentTableY -= ROW_TABLE_WIDTH;
+		}
+	);
+
+	const totalCategoryTotals = Object.values(categoryTotals).reduce(
+		(total, amount) => total + amount,
+		0
+	);
+
+	const totalAmount = hasSampleCollection
+		? totalCategoryTotals + 6.0
+		: totalCategoryTotals;
+
+	secondPage.drawText(`Data: ${getCurrentDate()}`, {
+		x: 75,
+		y: currentTableY + 10,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawText(`${totalAmount.toFixed(2)}`, {
+		x: 470,
+		y: currentTableY + 10,
+		color: rgb(0, 0, 0),
+	});
+	secondPage.drawRectangle({
+		x: 30,
+		y: currentTableY + 5,
+		width: 30,
+		height: ROW_TABLE_WIDTH,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 60,
+		y: currentTableY + 5,
+		width: 400,
+		height: ROW_TABLE_WIDTH,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
+	secondPage.drawRectangle({
+		x: 460,
+		y: currentTableY + 5,
+		width: PAGE_WIDTH - 490,
+		height: ROW_TABLE_WIDTH,
+		borderColor: rgb(0, 0, 0),
+		borderWidth: 1,
+	});
 	const pdfBytes = await pdfDoc.save();
 	return pdfBytes;
 };

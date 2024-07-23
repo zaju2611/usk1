@@ -19,7 +19,11 @@ export default function TestGenerator({ tests }) {
 		setFormData((prevState) => ({
 			...prevState,
 			selectedTests: selectedOption
-				? selectedOption.map((option) => option.value)
+				? selectedOption.map((option) => ({
+						value: option.value,
+						price: option.price,
+						type: option.type,
+				  }))
 				: [],
 		}));
 	};
@@ -27,6 +31,8 @@ export default function TestGenerator({ tests }) {
 	const availableTests = tests.map((test) => ({
 		value: test.name,
 		label: test.name,
+		price: test.price,
+		type: test.type,
 	}));
 
 	return (
