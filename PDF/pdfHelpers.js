@@ -319,7 +319,7 @@ const generatePDF = async (
 	);
 	page.drawText("w SPSK1 w Lublinie", { x: 400, y: 695, color: rgb(0, 0, 0) });
 	page.setFontSize(FONT_SIZE_TINY);
-	page.drawText("podpis pacjenta", { x: 413, y: 685, color: rgb(0, 0, 0) });
+	page.drawText("podpis pacjenta", { x: 411, y: 685, color: rgb(0, 0, 0) });
 	page.setFontSize(FONT_SIZE_SMALL);
 	page.drawText("Oddział szpitalny/tel. do pacjenta/adres", {
 		x: 30,
@@ -707,7 +707,7 @@ const generatePDF = async (
 		y: currentTableY + 10,
 		color: rgb(0, 0, 0),
 	});
-	secondPage.drawText(`${totalAmount.toFixed(2)}`, {
+	secondPage.drawText(`Suma: ${totalAmount.toFixed(2)} zł`, {
 		x: 470,
 		y: currentTableY + 10,
 		color: rgb(0, 0, 0),
