@@ -1,65 +1,26 @@
 import { PDFDocument, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
-
-const PAGE_WIDTH = 595.28;
-const PAGE_HEIGHT = 841.89;
-const FONT_SIZE_SMALL = 8;
-const FONT_SIZE_MEDIUM = 11;
-const FONT_SIZE_LARGE = 13;
-const FONT_SIZE_TINY = 7;
-const BOX_SIZE = 5;
-const PADDING = 135;
-const ROW_HEIGHT = 10;
-const MIN_Y = 60;
-const COLUMN_WIDTH = PADDING + BOX_SIZE;
-
-const fetchFont = async () => {
-	const response = await fetch("/Lora.ttf");
-	return await response.arrayBuffer();
-};
-
-const drawTextCentered = (page, text, font, size, y) => {
-	const textWidth = font.widthOfTextAtSize(text, size);
-	page.drawText(text, {
-		x: (PAGE_WIDTH - textWidth) / 2,
-		y: y,
-		size: size,
-		font: font,
-		color: rgb(0, 0, 0),
-	});
-};
-
-const drawSquare = (page, x, y, filled) => {
-	page.drawRectangle({
-		x: x,
-		y: y,
-		width: 9,
-		height: 9,
-		borderColor: rgb(0, 0, 0),
-		borderWidth: 1,
-		color: filled ? rgb(0, 0, 0) : rgb(1, 1, 1),
-	});
-};
-
-const wrapText = (text, font, maxWidth, size) => {
-	const lines = [];
-	let currentLine = "";
-
-	text.split(" ").forEach((word) => {
-		const testLine = currentLine + (currentLine ? " " : "") + word;
-		const testLineWidth = font.widthOfTextAtSize(testLine, size);
-
-		if (testLineWidth > maxWidth) {
-			lines.push(currentLine);
-			currentLine = word;
-		} else {
-			currentLine = testLine;
-		}
-	});
-
-	if (currentLine) lines.push(currentLine);
-	return lines;
-};
+import { wrapText } from "./helpers/wrapText";
+import { drawWrappedText } from "./helpers/drawWrappedText";
+import { drawSquare } from "./helpers/drawSquare";
+import { drawTextCentered } from "./helpers/drawTextCentered";
+import { fetchFont } from "./helpers/fetchFont";
+import {
+	PAGE_WIDTH,
+	PAGE_HEIGHT,
+	FONT_SIZE_SMALL,
+	FONT_SIZE_MEDIUM,
+	FONT_SIZE_LARGE,
+	FONT_SIZE_TINY,
+	BOX_SIZE,
+	ROW_HEIGHT,
+	MIN_Y,
+	COLUMN_WIDTH,
+	ROW_TABLE_WIDTH,
+	INITIAL_Y,
+} from "./data/constants.js";
+import { categories } from "./data/categories.js";
+import { drawTableHeaders, drawTableRow } from "./helpers/drawTable";
 
 const generatePDF = async (
 	formData,
@@ -411,29 +372,6 @@ const generatePDF = async (
 		color: rgb(0, 0, 0),
 	});
 
-	const drawWrappedText = (
-		page,
-		text,
-		x,
-		y,
-		maxWidth,
-		font,
-		size,
-		lineHeight,
-		color
-	) => {
-		const lines = wrapText(text, font, maxWidth, size);
-		lines.forEach((line, index) => {
-			page.drawText(line, {
-				x: x,
-				y: y - index * lineHeight,
-				size: size,
-				color: color,
-			});
-		});
-		return y - lines.length * lineHeight;
-	};
-
 	let currentY = 690;
 
 	const formatTestNames = (tests) => {
@@ -509,54 +447,7 @@ const generatePDF = async (
 		FONT_SIZE_MEDIUM,
 		380
 	);
-
-	secondPage.drawRectangle({
-		x: 30,
-		y: 360,
-		width: PAGE_WIDTH - 60,
-		height: 60,
-		borderColor: rgb(0, 0, 0),
-		borderWidth: 1,
-	});
-	secondPage.drawText("Lp.", {
-		x: 35,
-		y: 345,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("Imię i Nazwisko Pacjenta", {
-		x: 75,
-		y: 345,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("Kwota badania", {
-		x: 470,
-		y: 345,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawRectangle({
-		x: 30,
-		y: 335,
-		width: 30,
-		height: 25,
-		borderColor: rgb(0, 0, 0),
-		borderWidth: 1,
-	});
-	secondPage.drawRectangle({
-		x: 60,
-		y: 335,
-		width: 400,
-		height: 25,
-		borderColor: rgb(0, 0, 0),
-		borderWidth: 1,
-	});
-	secondPage.drawRectangle({
-		x: 460,
-		y: 335,
-		width: PAGE_WIDTH - 490,
-		height: 25,
-		borderColor: rgb(0, 0, 0),
-		borderWidth: 1,
-	});
+	drawTableHeaders(secondPage);
 	secondPage.drawRectangle({
 		x: 30,
 		y: 310,
@@ -602,20 +493,6 @@ const generatePDF = async (
 		color: rgb(0, 0, 0),
 	});
 
-	const categories = [
-		{ name: "Badania hematologiczne", price: 0 },
-		{ name: "Hemostaza (osocze cytrynianowe)", price: 0 },
-		{ name: "Analityka ogólna", price: 0 },
-		{ name: "Chemia kliniczna (surowica)", price: 0 },
-		{ name: "Chemia kliniczna (mocz)", price: 0 },
-		{ name: "Immunochemia (surowica)", price: 0 },
-		{ name: "Markery chorób zakaźnych", price: 0 },
-		{ name: "Immunochemia (osocze wersenianowe)", price: 0 },
-		{ name: "Immunochemia (krew pełna wersenianowa)", price: 0 },
-		{ name: "Białka specyficzne", price: 0 },
-		{ name: "Narkotyki w moczu", price: 0 },
-	];
-
 	// Create a map from categories
 	const categoryPriceMap = categories.reduce((map, category) => {
 		map[category.name] = category.price;
@@ -637,59 +514,16 @@ const generatePDF = async (
 			categoryTotals[categoryName] += price;
 		}
 	});
-
-	console.log(categoryTotals); // Output the updated totals
-	const ROW_TABLE_WIDTH = 20;
-	const INITIAL_Y = 325;
 	let currentTableY = INITIAL_Y - ROW_TABLE_WIDTH - ROW_TABLE_WIDTH; // Adjust to start below the header
 
 	Object.entries(categoryTotals).forEach(
 		([categoryName, totalPrice], index) => {
-			// Draw row content
-			secondPage.drawText((index + 1).toString(), {
-				x: 40,
-				y: currentTableY + 10,
-				color: rgb(0, 0, 0),
-			});
-			secondPage.drawText(categoryName, {
-				x: 75,
-				y: currentTableY + 10,
-				color: rgb(0, 0, 0),
-			});
-			secondPage.drawText(totalPrice.toFixed(2), {
-				x: 470,
-				y: currentTableY + 10,
-				color: rgb(0, 0, 0),
-			});
-
-			// Draw row borders
-			secondPage.drawRectangle({
-				x: 30,
-				y: currentTableY + 5,
-				width: 30,
-				height: ROW_TABLE_WIDTH,
-				borderColor: rgb(0, 0, 0),
-				borderWidth: 1,
-			});
-			secondPage.drawRectangle({
-				x: 60,
-				y: currentTableY + 5,
-				width: 400,
-				height: ROW_TABLE_WIDTH,
-				borderColor: rgb(0, 0, 0),
-				borderWidth: 1,
-			});
-			secondPage.drawRectangle({
-				x: 460,
-				y: currentTableY + 5,
-				width: PAGE_WIDTH - 490,
-				height: ROW_TABLE_WIDTH,
-				borderColor: rgb(0, 0, 0),
-				borderWidth: 1,
-			});
-
-			// Move to the next row
-			currentTableY -= ROW_TABLE_WIDTH;
+			currentTableY = drawTableRow(
+				secondPage,
+				{ categoryName, totalPrice },
+				index,
+				currentTableY
+			);
 		}
 	);
 
@@ -745,6 +579,7 @@ const downloadPDF = (pdfBytes, fileName) => {
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement("a");
 	a.href = url;
+	window.open(url, "_blank");
 	a.download = fileName;
 	document.body.appendChild(a);
 	a.click();

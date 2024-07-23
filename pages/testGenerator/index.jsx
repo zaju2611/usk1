@@ -28,6 +28,15 @@ export default function TestGenerator({ tests }) {
 		}));
 	};
 
+	const resetForm = () => {
+		setFormData({
+			firstName: "",
+			lastName: "",
+			pesel: "",
+			phoneNumber: "",
+		});
+	};
+
 	const availableTests = tests.map((test) => ({
 		value: test.name,
 		label: test.name,
@@ -44,6 +53,7 @@ export default function TestGenerator({ tests }) {
 					handleChange={handleChange}
 					handleTestChange={handleTestChange}
 					availableTests={availableTests}
+					resetForm={resetForm}
 				/>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Select from "react-select";
-import { generatePDF, downloadPDF } from "../../PDF/pdfHelpers";
+import { generatePDF, downloadPDF } from "../../PDF/pdfGenerator";
 import classes from "./Form.module.css";
 import { referralTests } from "../../referralData";
 import {
@@ -10,12 +10,23 @@ import {
 } from "../../helpers/helpers";
 import { customStyles } from "../../styles/selectStyles";
 
-const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
+const Form = ({
+	formData,
+	handleChange,
+	handleTestChange,
+	availableTests,
+	resetForm,
+}) => {
 	const [selectedTests, setSelectedTests] = useState([]);
 
 	const handleTestChangeInternal = (selectedOptions) => {
 		setSelectedTests(selectedOptions);
 		handleTestChange(selectedOptions);
+	};
+
+	const reset = () => {
+		resetForm();
+		setSelectedTests([]);
 	};
 
 	const handleSubmitInternal = async (event) => {
@@ -34,6 +45,8 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 			pdfBytes,
 			`${formData.firstName}_${formData.lastName}_skierowanie.pdf`
 		);
+
+		reset();
 	};
 
 	return (
@@ -79,7 +92,6 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 					name="phoneNumber"
 					value={formData.phoneNumber}
 					onChange={handleChange}
-					required
 				/>
 			</div>
 			<div className={classes.formGroup}>
@@ -92,6 +104,7 @@ const Form = ({ formData, handleChange, handleTestChange, availableTests }) => {
 					onChange={handleTestChangeInternal}
 					placeholder="Wybierz badanie"
 					styles={customStyles}
+					value={selectedTests}
 				/>
 			</div>
 			<div className={classes.buttonContainer}>
