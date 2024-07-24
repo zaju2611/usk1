@@ -275,6 +275,11 @@ export const referralTests = [
 		category: "Badania immunochemiczne",
 	},
 	{
+		label: "Insulina",
+		value: "Insulina",
+		category: "Badania immunochemiczne",
+	},
+	{
 		label: "Anty-TPO",
 		value: "P/ciała p/peroksydazie tarczycowej",
 		category: "Badania immunochemiczne",
@@ -591,22 +596,27 @@ export const referralTests = [
 	},
 	{
 		label: "Sód - mocz",
-		value: "Sód DZM",
+		value: "Sód - mocz",
 		category: "Badania biochemiczne moczu",
 	},
 	{
 		label: "Potas - mocz",
-		value: "Potas DZM",
+		value: "Potas - mocz",
 		category: "Badania biochemiczne moczu",
 	},
 	{
 		label: "Mocznik - mocz",
-		value: "Mocznik DZM",
+		value: "Mocznik - mocz",
 		category: "Badania biochemiczne moczu",
 	},
 	{
 		label: "Kreatynina - mocz",
-		value: "Kreatynina DZM",
+		value: "Kreatynina - mocz",
+		category: "Badania biochemiczne moczu",
+	},
+	{
+		label: "Amylaza - mocz",
+		value: "Amylaza - mocz",
 		category: "Badania biochemiczne moczu",
 	},
 ];
