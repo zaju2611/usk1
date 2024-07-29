@@ -53,9 +53,15 @@ const generatePDF = async (
 		value: test.value,
 	}));
 
+	const hasSampleCollection = Object.values(formData.selectedTests).some(
+		(test) => test.value === "Pobranie materiału"
+	);
+
 	// Collecting tests that are not in referralTests
 	const otherTests = allTests.filter(
-		(test) => !referralTests.some((refTest) => refTest.value === test.value)
+		(test) =>
+			!referralTests.some((refTest) => refTest.value === test.value) &&
+			(!hasSampleCollection || test.value !== "Pobranie materiału")
 	);
 
 	Object.keys(groupedTests).forEach((category) => {
@@ -317,9 +323,7 @@ const generatePDF = async (
 		color: rgb(0, 0, 0),
 	});
 	page.setFontSize(16);
-	const hasSampleCollection = Object.values(formData.selectedTests).some(
-		(test) => test.value === "Pobranie materiału"
-	);
+
 	page.drawText(
 		hasSampleCollection
 			? (formData.selectedTests.length - 1).toString()
@@ -383,7 +387,13 @@ const generatePDF = async (
 	let currentY = 690;
 
 	const formatTestNames = (tests) => {
-		return tests.map((test) => test.value).join(", ");
+		// Filtrujemy testy, aby wykluczyć te z wartością "Pobranie materiału"
+		const filteredTests = tests.filter(
+			(test) => test.value !== "Pobranie materiału"
+		);
+
+		// Mapujemy wartości i łączymy je w jeden string
+		return filteredTests.map((test) => test.value).join(", ");
 	};
 
 	const formattedTestNames = formatTestNames(formData.selectedTests);
