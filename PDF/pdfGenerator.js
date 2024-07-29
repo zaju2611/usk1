@@ -317,11 +317,19 @@ const generatePDF = async (
 		color: rgb(0, 0, 0),
 	});
 	page.setFontSize(16);
-	page.drawText(`${formData.selectedTests.length}`, {
-		x: 500,
-		y: 57,
-		color: rgb(0, 0, 0),
-	});
+	const hasSampleCollection = Object.values(formData.selectedTests).some(
+		(test) => test.value === "Pobranie materiału"
+	);
+	page.drawText(
+		hasSampleCollection
+			? (formData.selectedTests.length - 1).toString()
+			: formData.selectedTests.length.toString(),
+		{
+			x: 500,
+			y: 57,
+			color: rgb(0, 0, 0),
+		}
+	);
 
 	page.drawRectangle({
 		x: 485,
@@ -597,10 +605,6 @@ const generatePDF = async (
 		y: 318,
 		color: rgb(0, 0, 0),
 	});
-
-	const hasSampleCollection = Object.values(formData.selectedTests).some(
-		(test) => test.value === "Pobranie materiału"
-	);
 
 	// Determine the header text
 	const headerText = hasSampleCollection ? "+ 6 zł pobranie" : "";
