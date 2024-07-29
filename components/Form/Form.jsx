@@ -9,6 +9,7 @@ import {
 	getCurrentDate,
 } from "../../helpers/helpers";
 import { customStyles } from "../../styles/selectStyles";
+import Authorized_person from "./Authorized_person";
 
 const Form = ({
 	formData,
@@ -18,7 +19,7 @@ const Form = ({
 	resetForm,
 }) => {
 	const [selectedTests, setSelectedTests] = useState([]);
-
+	const [isChecked, setIsChecked] = useState(false);
 	const handleTestChangeInternal = (selectedOptions) => {
 		setSelectedTests(selectedOptions);
 		handleTestChange(selectedOptions);
@@ -27,6 +28,7 @@ const Form = ({
 	const reset = () => {
 		resetForm();
 		setSelectedTests([]);
+		setIsChecked(false);
 	};
 
 	const handleSubmitInternal = async (event) => {
@@ -47,6 +49,13 @@ const Form = ({
 		);
 
 		reset();
+	};
+
+	const handleCheckboxChange = (event) => {
+		setIsChecked(event.target.checked);
+		handleChange({
+			target: { name: "authorization", value: event.target.checked },
+		});
 	};
 
 	return (
@@ -107,6 +116,21 @@ const Form = ({
 					value={selectedTests}
 				/>
 			</div>
+			<div className={classes.checkboxContainer}>
+				<input
+					type="checkbox"
+					id="authorization"
+					name="authorization"
+					value={formData.authorization}
+					checked={isChecked}
+					onChange={handleCheckboxChange}
+				/>
+				<label htmlFor="authorization">Upoważnienie do obioru badań</label>
+			</div>
+			{isChecked && (
+				<Authorized_person formData={formData} handleChange={handleChange} />
+			)}
+
 			<div className={classes.buttonContainer}>
 				<button type="submit" className={classes.submitButton}>
 					Generuj

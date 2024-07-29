@@ -7,6 +7,10 @@ export default function TestGenerator({ tests }) {
 		lastName: "",
 		pesel: "",
 		phoneNumber: "",
+		authorization: false,
+		firstNameAuthorized: "",
+		lastNameAuthorized: "",
+		peselAuthorized: "",
 		selectedTests: [],
 	});
 
@@ -34,6 +38,10 @@ export default function TestGenerator({ tests }) {
 			lastName: "",
 			pesel: "",
 			phoneNumber: "",
+			authorization: false,
+			firstNameAuthorized: "",
+			lastNameAuthorized: "",
+			peselAuthorized: "",
 		});
 	};
 
