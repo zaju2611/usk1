@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useLoading } from "../context/LoadingContext";
+import { useRouter } from "next/router";
+import { HashLoader } from "react-spinners";
 
 export default function Home() {
-	const [loading, setLoading] = useState(false);
+	const { loading, setLoading } = useLoading();
+	const router = useRouter();
 
 	const handleLinkClick = () => {
 		setLoading(true);
-
-		setTimeout(() => {
-			setLoading(false);
-		}, 2000);
 	};
+	useEffect(() => {
+		setLoading(false);
+	}, [router.pathname, setLoading]);
 
 	return (
 		<div>
@@ -25,12 +28,16 @@ export default function Home() {
 			<main className="main row-btn">
 				<Link href="/testGenerator" legacyBehavior>
 					<a className="button" onClick={handleLinkClick}>
-						{loading ? "Ładowanie..." : "Generuj skierowanie"}
+						{loading ? (
+							<HashLoader size={25} color="#f2f8f9" />
+						) : (
+							"Generuj skierowanie"
+						)}
 					</a>
 				</Link>
 				<Link href="/prices" legacyBehavior>
 					<a className="button" onClick={handleLinkClick}>
-						{loading ? "Ładowanie..." : "Cennik"}
+						{loading ? <HashLoader size={25} color="#f2f8f9" /> : "Cennik"}
 					</a>
 				</Link>
 			</main>

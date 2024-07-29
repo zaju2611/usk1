@@ -1,10 +1,10 @@
 import { MongoClient } from "mongodb";
 
 async function handler(req, res) {
+	const connectionString = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_clustername}.rh28ezq.mongodb.net/${process.env.mongodb_database}?retryWrites=true&w=majority&appName=Project1`;
+
 	try {
-		const client = await MongoClient.connect(
-			"mongodb+srv://test:dOylIYChyNeJOLwL@project1.rh28ezq.mongodb.net/usk?retryWrites=true&w=majority&appName=Project1"
-		);
+		const client = await MongoClient.connect(connectionString);
 
 		const db = client.db();
 		const tests = await db.collection("badania").find().toArray();
@@ -14,7 +14,7 @@ async function handler(req, res) {
 		client.close();
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json({ error: "Could not connect to database" });
 	}
 }
 

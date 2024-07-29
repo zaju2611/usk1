@@ -1,6 +1,14 @@
 import Tests from "../../components/TestsList/TestsList";
+import { useLoading } from "../../context/LoadingContext";
+import { useEffect } from "react";
 
 export default function Prices({ tests }) {
+	const { setLoading } = useLoading();
+
+	useEffect(() => {
+		setLoading(false);
+	}, [setLoading]);
+
 	return (
 		<div>
 			<div className>
@@ -12,7 +20,7 @@ export default function Prices({ tests }) {
 }
 
 export async function getServerSideProps() {
-	const res = await fetch("https://usk1.vercel.app//api/tests");
+	const res = await fetch(`${process.env.API_URL}/api/tests`);
 	const data = await res.json();
 
 	return {
