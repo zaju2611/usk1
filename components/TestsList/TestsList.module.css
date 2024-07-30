@@ -33,3 +33,41 @@
 	min-width: 625px;
 	text-align: left;
 }
+
+@media (max-width: 768px) {
+	.wrapper {
+		padding: 0.5rem;
+	}
+	.colName {
+		min-width: auto;
+	}
+	.table {
+		min-width: 400px;
+	}
+	.table th,
+	.table td {
+		padding: 6px;
+		font-size: 0.9rem;
+	}
+
+	.categoryRow td {
+		padding: 8px;
+		font-size: 1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.table {
+		min-width: 300px;
+		font-size: 0.8rem;
+	}
+
+	.table th,
+	.table td {
+		padding: 4px;
+	}
+
+	.categoryRow td {
+		padding: 6px;
+	}
+}

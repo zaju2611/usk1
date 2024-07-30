@@ -16,3 +16,27 @@
 .link:hover {
 	color: var(--spsk1Main3);
 }
+
+@media (max-width: 768px) {
+	.footer {
+		padding: 1rem 2rem;
+	}
+
+	.footer iframe {
+		width: 100%;
+		max-width: 225px;
+		margin-top: 1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.footer {
+		flex-direction: column;
+		text-align: center;
+		padding: 1rem;
+	}
+
+	.link {
+		font-size: 0.875rem;
+	}
+}

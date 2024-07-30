@@ -11,3 +11,34 @@
 	font-weight: bold;
 	font-size: 1.7rem;
 }
+
+@media (max-width: 768px) {
+	.navbar {
+		padding: 1rem 2rem;
+	}
+
+	.text {
+		font-size: 1.2rem;
+		text-align: center;
+	}
+
+	.navbar img {
+		width: 80px;
+		height: 80px;
+	}
+}
+
+@media (max-width: 480px) {
+	.navbar {
+		padding: 1rem;
+	}
+
+	.text {
+		font-size: 0.8rem;
+	}
+
+	.navbar img {
+		width: 60px;
+		height: 60px;
+	}
+}

@@ -16,7 +16,7 @@ function TestsList({ tests }) {
 	let currentType = null;
 
 	return (
-		<>
+		<div className={classes.wrapper}>
 			<SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
 			<table className={classes.table}>
 				<thead>
@@ -52,7 +52,7 @@ function TestsList({ tests }) {
 					})}
 				</tbody>
 			</table>
-		</>
+		</div>
 	);
 }
 
