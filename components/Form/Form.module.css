@@ -104,14 +104,8 @@
 		box-shadow: none;
 	}
 
-	.formGroup {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
 	.formGroup label {
-		width: 100%;
-		margin-bottom: 0.5rem;
+		width: 245px;
 		font-size: 0.9rem;
 	}
 
@@ -132,6 +126,14 @@
 		padding: 0.5rem;
 	}
 
+	.formGroup {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.formGroup label {
+		width: 100%;
+	}
 	.submitButton {
 		width: 80px;
 		padding: 8px;
@@ -140,6 +142,6 @@
 
 	.checkboxContainer {
 		flex-direction: column;
-		gap: 4px;
+		gap: 0px;
 	}
 }

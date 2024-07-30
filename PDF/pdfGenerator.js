@@ -6,6 +6,13 @@ import { drawSquare } from "./helpers/drawSquare";
 import { drawTextCentered } from "./helpers/drawTextCentered";
 import { fetchFont } from "./helpers/fetchFont";
 import {
+	drawHeader,
+	drawPatientInfo,
+	drawAuthorizedPersonInfo,
+	drawFooter,
+	formatTestNames,
+} from "../PDF/helpers/drawAuthorization";
+import {
 	PAGE_WIDTH,
 	PAGE_HEIGHT,
 	FONT_SIZE_SMALL,
@@ -348,54 +355,16 @@ const generatePDF = async (
 	secondPage.setFont(customFont);
 	secondPage.setFontSize(FONT_SIZE_MEDIUM);
 
-	secondPage.drawText("Dział Diagnostyki Laboratoryjnej USK Nr 1", {
-		x: 30,
-		y: 810,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("20-841 Lublin ul. Al. Solidarności 8", {
-		x: 30,
-		y: 795,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("(wejście od ul. Staszica 16)", {
-		x: 30,
-		y: 780,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("tel. (81)-532-38-16", {
-		x: 30,
-		y: 765,
-		color: rgb(0, 0, 0),
-	});
 	secondPage.drawText("Upoważnienie do odbioru wyników badań.", {
 		x: 30,
 		y: 740,
 		color: rgb(0, 0, 0),
 	});
-	secondPage.drawText(`Pacjent: ${formData.firstName} ${formData.lastName}`, {
-		x: 30,
-		y: 720,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText(`PESEL: ${formData.pesel}`, {
-		x: 30,
-		y: 705,
-		color: rgb(0, 0, 0),
-	});
+
+	drawHeader(secondPage, 30, 810);
+	drawPatientInfo(secondPage, formData, 30, 720);
 
 	let currentY = 690;
-
-	const formatTestNames = (tests) => {
-		// Filtrujemy testy, aby wykluczyć te z wartością "Pobranie materiału"
-		const filteredTests = tests.filter(
-			(test) => test.value !== "Pobranie materiału"
-		);
-
-		// Mapujemy wartości i łączymy je w jeden string
-		return filteredTests.map((test) => test.value).join(", ");
-	};
-
 	const formattedTestNames = formatTestNames(formData.selectedTests);
 
 	currentY = drawWrappedText(
@@ -412,105 +381,20 @@ const generatePDF = async (
 
 	currentY -= 30; // Add some space after the wrapped text
 
-	secondPage.drawText(`Data: `, {
-		x: 30,
-		y: currentY,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText(`Podpis os. pobierającej: `, {
-		x: 160,
-		y: currentY,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText(`${getCurrentDate()}`, {
-		x: 30,
-		y: currentY - 15,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText(`............................................`, {
-		x: 160,
-		y: currentY - 15,
-		color: rgb(0, 0, 0),
-	});
-	currentY -= 45; // Space for the date and signature lines
+	drawFooter(secondPage, 30, currentY, getCurrentDate);
 
-	secondPage.drawText("Wyniki badań odbierane są w laboratorium po", {
-		x: 30,
-		y: currentY,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("okazaniu dowodu osobistego i dokumentu", {
-		x: 30,
-		y: currentY - 15,
-		color: rgb(0, 0, 0),
-	});
-	secondPage.drawText("zapłaty", {
-		x: 30,
-		y: currentY - 30,
-		color: rgb(0, 0, 0),
-	});
-
-	//--------------------------------------------------------------------------
 	if (formData.authorization) {
-		secondPage.drawText("Dział Diagnostyki Laboratoryjnej USK Nr 1", {
-			x: 300,
-			y: 810,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText("20-841 Lublin ul. Al. Solidarności 8", {
-			x: 300,
-			y: 795,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText("(wejście od ul. Staszica 16)", {
-			x: 300,
-			y: 780,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText("tel. (81)-532-38-16", {
-			x: 300,
-			y: 765,
-			color: rgb(0, 0, 0),
-		});
 		secondPage.drawText("Upoważnienie do odbioru wyników badań.", {
 			x: 300,
 			y: 740,
 			color: rgb(0, 0, 0),
 		});
-		secondPage.drawText(`Pacjent: ${formData.firstName} ${formData.lastName}`, {
-			x: 300,
-			y: 720,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText(`PESEL: ${formData.pesel}`, {
-			x: 300,
-			y: 705,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText("Upoważniam", {
-			x: 300,
-			y: 690,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText(
-			`Osoba upoważniona: ${formData.firstNameAuthorized} ${formData.lastNameAuthorized}`,
-			{
-				x: 300,
-				y: 675,
-				color: rgb(0, 0, 0),
-			}
-		);
-		secondPage.drawText(
-			`PESEL osoby upoważnionej: ${formData.peselAuthorized}`,
-			{
-				x: 300,
-				y: 660,
-				color: rgb(0, 0, 0),
-			}
-		);
+		drawHeader(secondPage, 300, 810);
+		drawPatientInfo(secondPage, formData, 300, 720);
+
+		drawAuthorizedPersonInfo(secondPage, formData, 300, 690);
 
 		let currentYAuthorized = 645;
-
 		const formattedTestNamesAuthorized = formatTestNames(
 			formData.selectedTests
 		);
@@ -529,45 +413,8 @@ const generatePDF = async (
 
 		currentYAuthorized -= 30; // Add some space after the wrapped text
 
-		secondPage.drawText(`Data: `, {
-			x: 300,
-			y: currentYAuthorized,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText(`Podpis os. pobierającej: `, {
-			x: 430,
-			y: currentYAuthorized,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText(`${getCurrentDate()}`, {
-			x: 300,
-			y: currentYAuthorized - 15,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText(`............................................`, {
-			x: 430,
-			y: currentYAuthorized - 15,
-			color: rgb(0, 0, 0),
-		});
-		currentYAuthorized -= 45; // Space for the date and signature lines
-
-		secondPage.drawText("Wyniki badań odbierane są w laboratorium po", {
-			x: 300,
-			y: currentYAuthorized,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText("okazaniu dowodu osobistego i dokumentu", {
-			x: 300,
-			y: currentYAuthorized - 15,
-			color: rgb(0, 0, 0),
-		});
-		secondPage.drawText("zapłaty", {
-			x: 300,
-			y: currentYAuthorized - 30,
-			color: rgb(0, 0, 0),
-		});
+		drawFooter(secondPage, 300, currentYAuthorized, getCurrentDate);
 	}
-	//-----------------------------------------------------------------------
 
 	// Rysowanie nagłówków tabeli
 	drawTextCentered(
