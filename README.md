@@ -27,4 +27,4 @@ To start this project at your computer
 
 ## HOSTING
 
-*The application is hosted at usk1.vercel.app.
+* The application is hosted at usk1.vercel.app.
