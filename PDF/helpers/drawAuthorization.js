@@ -57,17 +57,24 @@ export const drawAuthorizedPersonInfo = (page, formData, x, y) => {
 	});
 };
 
-export const drawFooter = (page, x, y, getCurrentDate) => {
+export const drawFooter = (page, x, y, getCurrentDate, signatureType) => {
 	page.drawText(`Data: `, {
 		x,
 		y,
 		color: rgb(0, 0, 0),
 	});
-	page.drawText(`Podpis os. pobierającej: `, {
+
+	let signatureText = `Podpis os. pobierającej: `;
+	if (signatureType === "authorizing") {
+		signatureText = `Podpis os. upoważniającej: `;
+	}
+
+	page.drawText(signatureText, {
 		x: x + 130,
 		y,
 		color: rgb(0, 0, 0),
 	});
+
 	page.drawText(`${getCurrentDate()}`, {
 		x,
 		y: y - 15,

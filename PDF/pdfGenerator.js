@@ -413,7 +413,13 @@ const generatePDF = async (
 
 		currentYAuthorized -= 30; // Add some space after the wrapped text
 
-		drawFooter(secondPage, 300, currentYAuthorized, getCurrentDate);
+		drawFooter(
+			secondPage,
+			300,
+			currentYAuthorized,
+			getCurrentDate,
+			"authorizing"
+		);
 	}
 
 	// Rysowanie nagłówków tabeli
