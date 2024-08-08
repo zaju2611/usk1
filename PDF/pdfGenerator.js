@@ -390,28 +390,13 @@ const generatePDF = async (
 			color: rgb(0, 0, 0),
 		});
 		drawHeader(secondPage, 300, 810);
-		drawPatientInfo(secondPage, formData, 300, 720);
+		drawPatientInfo(secondPage, formData, 300, 720, "authorizing");
 
-		drawAuthorizedPersonInfo(secondPage, formData, 300, 690);
+		drawAuthorizedPersonInfo(secondPage, formData, 300, 675);
 
-		let currentYAuthorized = 645;
-		const formattedTestNamesAuthorized = formatTestNames(
-			formData.selectedTests
-		);
+		let currentYAuthorized = 630;
 
-		currentYAuthorized = drawWrappedText(
-			secondPage,
-			`Badania: ${formattedTestNamesAuthorized}`,
-			300,
-			currentYAuthorized,
-			250,
-			customFont,
-			FONT_SIZE_MEDIUM,
-			15,
-			rgb(0, 0, 0)
-		);
-
-		currentYAuthorized -= 30; // Add some space after the wrapped text
+		currentYAuthorized -= 30;
 
 		drawFooter(
 			secondPage,
@@ -422,7 +407,6 @@ const generatePDF = async (
 		);
 	}
 
-	// Rysowanie nagłówków tabeli
 	drawTextCentered(
 		secondPage,
 		"Badania odpłatne wykonywane w",

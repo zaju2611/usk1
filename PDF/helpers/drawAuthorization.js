@@ -23,8 +23,12 @@ export const drawHeader = (page, x, y) => {
 	});
 };
 
-export const drawPatientInfo = (page, formData, x, y) => {
-	page.drawText(`Pacjent: ${formData.firstName} ${formData.lastName}`, {
+export const drawPatientInfo = (page, formData, x, y, signatureType) => {
+	let signatureText = `Pacjent: ${formData.firstName} ${formData.lastName}`;
+	if (signatureType === "authorizing") {
+		signatureText = `Ja pacjent: ${formData.firstName} ${formData.lastName}`;
+	}
+	page.drawText(signatureText, {
 		x,
 		y,
 		color: rgb(0, 0, 0),
@@ -37,20 +41,21 @@ export const drawPatientInfo = (page, formData, x, y) => {
 };
 
 export const drawAuthorizedPersonInfo = (page, formData, x, y) => {
-	page.drawText("Upoważniam", {
-		x,
-		y,
-		color: rgb(0, 0, 0),
-	});
 	page.drawText(
-		`Osoba upoważniona: ${formData.firstNameAuthorized} ${formData.lastNameAuthorized}`,
+		`Upoważniam ${formData.firstNameAuthorized} ${formData.lastNameAuthorized}`,
 		{
 			x,
-			y: y - 15,
+			y,
 			color: rgb(0, 0, 0),
 		}
 	);
-	page.drawText(`PESEL osoby upoważnionej: ${formData.peselAuthorized}`, {
+
+	page.drawText(`PESEL: ${formData.peselAuthorized}`, {
+		x,
+		y: y - 15,
+		color: rgb(0, 0, 0),
+	});
+	page.drawText(`Do odbioru moich wyników badań.`, {
 		x,
 		y: y - 30,
 		color: rgb(0, 0, 0),
@@ -104,11 +109,9 @@ export const drawFooter = (page, x, y, getCurrentDate, signatureType) => {
 };
 
 export const formatTestNames = (tests) => {
-	// Filtrujemy testy, aby wykluczyć te z wartością "Pobranie materiału"
 	const filteredTests = tests.filter(
 		(test) => test.value !== "Pobranie materiału"
 	);
 
-	// Mapujemy wartości i łączymy je w jeden string
 	return filteredTests.map((test) => test.value).join(", ");
 };
