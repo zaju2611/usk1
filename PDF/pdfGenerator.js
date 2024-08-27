@@ -208,7 +208,7 @@ const generatePDF = async (
 	page.setFontSize(FONT_SIZE_LARGE);
 	drawTextCentered(
 		page,
-		"Samodzielny Publiczny Szpital Kliniczny Nr 1 w Lublinie",
+		"Uniwersytecki Szpital Kliniczny Nr 1 w Lublinie",
 		customFont,
 		FONT_SIZE_LARGE,
 		780
@@ -243,28 +243,29 @@ const generatePDF = async (
 		color: rgb(0, 0, 0),
 	});
 
-	page.setFontSize(FONT_SIZE_SMALL);
+	page.setFontSize(FONT_SIZE_MEDIUM);
 	page.drawText(`Nazwisko: ${formData.lastName}`, {
 		x: 30,
-		y: 720,
+		y: 731,
 		color: rgb(0, 0, 0),
 	});
 	page.drawText(`Imię: ${formData.firstName}`, {
 		x: 30,
-		y: 705,
+		y: 715,
 		color: rgb(0, 0, 0),
 	});
 	page.drawText(`Nr tel: ${formData.phoneNumber}`, {
 		x: 30,
-		y: 690,
+		y: 698,
 		color: rgb(0, 0, 0),
 	});
 	page.drawText(`PESEL: ${formData.pesel}`, {
 		x: 30,
-		y: 675,
+		y: 681,
 		color: rgb(0, 0, 0),
 	});
 
+	page.setFontSize(FONT_SIZE_SMALL);
 	const dateOfBirth = getDateOfBirthFromPesel(formData.pesel);
 	page.drawText(`Data urodzenia: ${dateOfBirth}`, {
 		x: 160,
@@ -291,7 +292,7 @@ const generatePDF = async (
 		"Wyrażam zgodę na pobranie krwi i przetwarzanie danych osobowych",
 		{ x: 290, y: 705, color: rgb(0, 0, 0) }
 	);
-	page.drawText("w SPSK1 w Lublinie", { x: 400, y: 695, color: rgb(0, 0, 0) });
+	page.drawText("w USK1 w Lublinie", { x: 400, y: 695, color: rgb(0, 0, 0) });
 	page.setFontSize(FONT_SIZE_TINY);
 	page.drawText("podpis pacjenta", { x: 411, y: 685, color: rgb(0, 0, 0) });
 	page.setFontSize(FONT_SIZE_SMALL);
@@ -416,7 +417,7 @@ const generatePDF = async (
 	);
 	drawTextCentered(
 		secondPage,
-		"Dziale Diagnostyki Laboratoryjnej SPSK 1 w Lublinie",
+		"Dziale Diagnostyki Laboratoryjnej USK 1 w Lublinie",
 		customFont,
 		FONT_SIZE_MEDIUM,
 		380
@@ -456,26 +457,22 @@ const generatePDF = async (
 	// Determine the header text
 	const headerText = hasSampleCollection ? "+ 6 zł pobranie" : "";
 
-	// Draw the header text with the appropriate fee information
 	secondPage.drawText(headerText, {
 		x: 465,
 		y: 320,
 		color: rgb(0, 0, 0),
 	});
 
-	// Create a map from categories
 	const categoryPriceMap = categories.reduce((map, category) => {
 		map[category.name] = category.price;
 		return map;
 	}, {});
 
-	// Initialize categoryTotals with all categories, setting their prices to 0
 	const categoryTotals = categories.reduce((totals, category) => {
 		totals[category.name] = 0;
 		return totals;
 	}, {});
 
-	// Update categoryTotals based on selectedTests
 	formData.selectedTests.forEach((test) => {
 		const categoryName = test.type;
 		const price = test.price;
@@ -484,7 +481,7 @@ const generatePDF = async (
 			categoryTotals[categoryName] += price;
 		}
 	});
-	let currentTableY = INITIAL_Y - ROW_TABLE_WIDTH - ROW_TABLE_WIDTH; // Adjust to start below the header
+	let currentTableY = INITIAL_Y - ROW_TABLE_WIDTH - ROW_TABLE_WIDTH;
 
 	Object.entries(categoryTotals).forEach(
 		([categoryName, totalPrice], index) => {
@@ -547,13 +544,7 @@ const generatePDF = async (
 const downloadPDF = (pdfBytes, fileName) => {
 	const blob = new Blob([pdfBytes], { type: "application/pdf" });
 	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = url;
 	window.open(url, "_blank");
-	a.download = fileName;
-	document.body.appendChild(a);
-	a.click();
-	document.body.removeChild(a);
 };
 
 export { generatePDF, downloadPDF };
