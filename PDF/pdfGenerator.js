@@ -37,6 +37,7 @@ const generatePDF = async (
 	getCurrentDateTime,
 	getCurrentDate
 ) => {
+	console.log("Selected Tests with Updated Prices:", selectedTests);
 	const pdfDoc = await PDFDocument.create();
 	pdfDoc.registerFontkit(fontkit);
 	const fontBytes = await fetchFont();
@@ -380,7 +381,7 @@ const generatePDF = async (
 		rgb(0, 0, 0)
 	);
 
-	currentY -= 30; // Add some space after the wrapped text
+	currentY -= 30;
 
 	drawFooter(secondPage, 30, currentY, getCurrentDate);
 
@@ -454,7 +455,6 @@ const generatePDF = async (
 		color: rgb(0, 0, 0),
 	});
 
-	// Determine the header text
 	const headerText = hasSampleCollection ? "+ 6 zł pobranie" : "";
 
 	secondPage.drawText(headerText, {
