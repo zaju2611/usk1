@@ -473,7 +473,9 @@ const generatePDF = async (
 		return totals;
 	}, {});
 
-	formData.selectedTests.forEach((test) => {
+	console.log("Initial Category Totals:", categoryTotals);
+
+	selectedTests.forEach((test) => {
 		const categoryName = test.type;
 		const price = test.price;
 
@@ -481,6 +483,8 @@ const generatePDF = async (
 			categoryTotals[categoryName] += price;
 		}
 	});
+
+	console.log("Updated Category Totals:", categoryTotals);
 	let currentTableY = INITIAL_Y - ROW_TABLE_WIDTH - ROW_TABLE_WIDTH;
 
 	Object.entries(categoryTotals).forEach(
