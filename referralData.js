@@ -161,7 +161,7 @@ export const referralTests = [
 	},
 	{
 		label: "Wapń",
-		value: "Wapń",
+		value: "Wapń całkowity",
 		category: "Badania biochemiczne",
 	},
 	{
