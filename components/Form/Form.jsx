@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Select from "react-select";
 import { generatePDF, downloadPDF } from "../../PDF/pdfGenerator";
 import classes from "./Form.module.css";
@@ -11,6 +11,8 @@ import {
 import { customStyles } from "../../styles/selectStyles";
 import Authorized_person from "./Authorized_person";
 import GlucosePopup from "../GlucosePopup/Glucose";
+import calculateTotalAmount from "@/PDF/helpers/calculateTotalAmount";
+import CostPopup from "../CostPopup/CostPopup";
 
 const Form = ({
 	formData,
@@ -23,17 +25,43 @@ const Form = ({
 	const [isChecked, setIsChecked] = useState(false);
 	const [glucoseTestDraws, setGlucoseTestDraws] = useState("");
 	const [showPopup, setShowPopup] = useState(false);
+	const [totalAmount, setTotalAmount] = useState(0);
+	const [showDownloadPopup, setShowDownloadPopup] = useState(false);
 
 	const handleTestChangeInternal = (selectedOptions) => {
 		setSelectedTests(selectedOptions);
 		handleTestChange(selectedOptions);
 	};
 
+	useEffect(() => {
+		const categoryTotals = selectedTests.reduce((totals, test) => {
+			totals[test.label] =
+				test.price *
+				(test.label.includes("Test tolerancji glukozy") ? glucoseTestDraws : 1);
+			return totals;
+		}, {});
+
+		const hasSampleCollectionTest = selectedTests.some((test) =>
+			[
+				"Test tolerancji glukozy (75g)",
+				"Test tolerancji glukozy u ciężarnej (75g)",
+			].includes(test.label)
+		);
+
+		const totalCost = calculateTotalAmount(
+			categoryTotals,
+			hasSampleCollectionTest
+		);
+
+		setTotalAmount(totalCost);
+	}, [selectedTests, glucoseTestDraws]);
+
 	const reset = () => {
 		resetForm();
 		setSelectedTests([]);
 		setIsChecked(false);
 		setGlucoseTestDraws(1);
+		setShowDownloadPopup(false);
 	};
 
 	const handleSubmitInternal = async (event) => {
@@ -51,22 +79,12 @@ const Form = ({
 			return;
 		}
 
-		await generateAndDownloadPDF();
-
-		reset();
+		setShowDownloadPopup(true);
 	};
 
-	const generateAndDownloadPDF = async () => {
-		console.log("Selected Tests Before Update:", selectedTests);
-		console.log("Glucose Test Draws:", glucoseTestDraws);
-
-		const updatedSelectedTests = selectedTests.map((test) => {
+	const generateAndDownloadPDF = async (updatedTests) => {
+		const finalSelectedTests = updatedTests.map((test) => {
 			if (test.label.includes("Test tolerancji glukozy")) {
-				console.log(
-					`Updating ${test.label} price from ${test.price} to ${
-						test.price * glucoseTestDraws
-					}`
-				);
 				return {
 					...test,
 					price: test.price * glucoseTestDraws,
@@ -75,11 +93,9 @@ const Form = ({
 			return test;
 		});
 
-		console.log("Selected Tests After Update:", updatedSelectedTests);
-
 		const pdfBytes = await generatePDF(
 			formData,
-			updatedSelectedTests,
+			finalSelectedTests,
 			referralTests,
 			getDateOfBirthFromPesel,
 			getCurrentDateTime,
@@ -105,8 +121,25 @@ const Form = ({
 
 	const handlePopupConfirm = async () => {
 		setShowPopup(false);
-		await generateAndDownloadPDF();
-		reset();
+		setShowDownloadPopup(true);
+	};
+
+	const handleCostPopupConfirm = async (addSampleCollection) => {
+		let updatedTests = [...selectedTests];
+		if (addSampleCollection) {
+			updatedTests.push({
+				label: "Pobranie materiału",
+				price: 6,
+				value: "Pobranie materiału",
+			});
+		}
+		handleTestChangeInternal(updatedTests);
+
+		setTimeout(async () => {
+			await generateAndDownloadPDF(updatedTests);
+			console.log(formData.selectedTests);
+			reset();
+		}, 50);
 	};
 
 	return (
@@ -182,19 +215,29 @@ const Form = ({
 				{isChecked && (
 					<Authorized_person formData={formData} handleChange={handleChange} />
 				)}
-
+				<div className={classes.costContainer}>
+					<p className={classes.costText}>Koszt badań: {totalAmount} zł</p>
+				</div>
 				<div className={classes.buttonContainer}>
 					<button type="submit" className={classes.submitButton}>
 						Generuj
 					</button>
 				</div>
 			</form>
+
 			{showPopup && (
 				<GlucosePopup
 					glucoseTestDraws={glucoseTestDraws}
 					setGlucoseTestDraws={setGlucoseTestDraws}
 					onClose={handlePopupClose}
 					onConfirm={handlePopupConfirm}
+				/>
+			)}
+
+			{showDownloadPopup && (
+				<CostPopup
+					onClose={() => setShowDownloadPopup(false)}
+					onConfirm={handleCostPopupConfirm}
 				/>
 			)}
 		</>

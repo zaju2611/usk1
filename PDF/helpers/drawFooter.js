@@ -63,12 +63,11 @@ export default function drawFooter(
 	});
 	page.setFontSize(16);
 
-	page.drawText(
-		hasSampleCollection
-			? (formData.selectedTests.length - 1).toString()
-			: formData.selectedTests.length.toString(),
-		{ x: 500, y: 57, color: rgb(0, 0, 0) }
-	);
+	page.drawText(formData.selectedTests.length.toString(), {
+		x: 500,
+		y: 57,
+		color: rgb(0, 0, 0),
+	});
 
 	page.drawRectangle({
 		x: 485,

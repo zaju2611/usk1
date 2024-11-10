@@ -25,7 +25,7 @@ const GlucosePopup = ({
 					value={glucoseTestDraws}
 					onChange={(e) => setGlucoseTestDraws(e.target.value)}
 					min="1"
-					max="3"
+					max="5"
 					required
 				/>
 				<div className={classes.buttonContainer}>

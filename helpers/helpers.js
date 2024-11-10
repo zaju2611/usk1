@@ -3,15 +3,13 @@ export const getDateOfBirthFromPesel = (pesel) => {
 	let month = parseInt(pesel.slice(2, 4), 10);
 	const day = parseInt(pesel.slice(4, 6), 10);
 
-	let fullYear = year + 1900; // years 1900-1999
+	let fullYear = year + 1900;
 
 	if (month > 20) {
-		fullYear += 100; // years 2000-2099
+		fullYear += 100;
 		month -= 20;
 	} else if (month > 0) {
-		// years 1900-1999
 	} else {
-		// wrong date
 		return "Niepoprawny PESEL";
 	}
 
