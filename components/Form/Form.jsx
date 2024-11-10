@@ -135,11 +135,9 @@ const Form = ({
 		}
 		handleTestChangeInternal(updatedTests);
 
-		setTimeout(async () => {
-			await generateAndDownloadPDF(updatedTests);
-			console.log(formData.selectedTests);
-			reset();
-		}, 50);
+		await generateAndDownloadPDF(updatedTests);
+
+		reset();
 	};
 
 	return (

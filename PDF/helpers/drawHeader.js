@@ -12,7 +12,7 @@ export default function drawHeader(page, customFont) {
 	page.setFontSize(FONT_SIZE_MEDIUM);
 	drawTextCentered(
 		page,
-		"Skierowanie na badania odpłatne do Działu Diagnostyki Laboratoryjnej",
+		"Skierowanie na badania odpłatne w Dziale Diagnostyki Laboratoryjnej",
 		customFont,
 		FONT_SIZE_MEDIUM,
 		810

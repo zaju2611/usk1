@@ -10,12 +10,12 @@ export default function drawPatientInfo(
 	getDateOfBirthFromPesel
 ) {
 	page.setFontSize(FONT_SIZE_MEDIUM);
-	page.drawText(`Nazwisko: ${formData.lastName}`, {
+	page.drawText(`Nazwisko: ${formData.lastName.toUpperCase()}`, {
 		x: 30,
 		y: 731,
 		color: rgb(0, 0, 0),
 	});
-	page.drawText(`Imię: ${formData.firstName}`, {
+	page.drawText(`Imię: ${formData.firstName.toUpperCase()}`, {
 		x: 30,
 		y: 715,
 		color: rgb(0, 0, 0),
