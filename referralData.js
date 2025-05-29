@@ -355,6 +355,11 @@ export const referralTests = [
 		category: "Badania immunochemiczne",
 	},
 	{
+		label: "Wankomycyna",
+		value: "Wankomycyna",
+		category: "Badania immunochemiczne",
+	},
+	{
 		label: "Parathormon",
 		value: "Parathormon (PTH)",
 		category: "Badania immunochemiczne",
