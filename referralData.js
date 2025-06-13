@@ -475,13 +475,13 @@ export const referralTests = [
 		category: "Markery chorób zakaźnych",
 	},
 	{
-		label: "Anty-HBc Total",
-		value: "P/ciała p/HBc Total",
+		label: "Anty-HBc IgM",
+		value: "P/ciała p/HBc IgM",
 		category: "Markery chorób zakaźnych",
 	},
 	{
-		label: "Anty-HBc IgM",
-		value: "P/ciała p/HBc IgM",
+		label: "a-HBs",
+		value: "P/ciała p/HBs",
 		category: "Markery chorób zakaźnych",
 	},
 	{
