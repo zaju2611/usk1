@@ -5,7 +5,7 @@ export default function getOtherTests(
 ) {
 	return allTests.filter(
 		(test) =>
-			!referralTests.some((refTest) => refTest.value === test.value) && 
+			!referralTests.some((refTest) => refTest.value === test.value) 
 			// (!hasSampleCollection || test.value !== "Pobranie materiału")
 	);
 }
