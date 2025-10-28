@@ -40,6 +40,15 @@ export default function Home() {
 						{loading ? <HashLoader size={25} color="#f2f8f9" /> : "Cennik"}
 					</a>
 				</Link>
+				<Link href="/editTests" legacyBehavior>
+					<a className="button" onClick={handleLinkClick}>
+						{loading ? (
+							<HashLoader size={25} color="#f2f8f9" />
+						) : (
+							"Edytuj badania"
+						)}
+					</a>
+				</Link>
 			</main>
 		</div>
 	);
