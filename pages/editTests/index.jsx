@@ -1,11 +1,9 @@
+import EditTestsList from "@/components/editTests/EditTestsList";
 import { useLoading } from "../../context/LoadingContext";
 import { useEffect } from "react";
-import EditTestsList from "./EditTestsList";
 
 export default function EditTests({ tests }) {
 	const { setLoading } = useLoading();
-
-	console.log(tests);
 
 	useEffect(() => {
 		setLoading(false);

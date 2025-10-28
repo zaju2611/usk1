@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import classes from "./EditModal.module.css"; // używamy tego samego CSS
+import React, { useState } from "react";
+import classes from "./EditModal.module.css";
 
 export default function AddModal({ tests, onClose, refetch }) {
 	const [name, setName] = useState("");
@@ -12,12 +12,6 @@ export default function AddModal({ tests, onClose, refetch }) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		// Walidacja podstawowa
-		if (!name || !price || !type) {
-			alert("Proszę wypełnić wszystkie pola!");
-			return;
-		}
 
 		const newTest = {
 			name,

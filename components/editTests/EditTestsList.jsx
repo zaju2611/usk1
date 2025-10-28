@@ -4,7 +4,7 @@ import { mdiPencil, mdiDelete, mdiPlus } from "@mdi/js";
 import classes from "../../components/TestsList/TestsList.module.css";
 
 import SearchBar from "@/components/SearchBar/SearchBar";
-import EditModal from "./editModal";
+import EditModal from "./EditModal";
 import ConfirmDeleteModal from "./DeleteModal";
 import AddModal from "./AddModal";
 
@@ -46,9 +46,6 @@ export default function EditTestsList({ tests }) {
 		setDeleteTest(null);
 	};
 
-	const handleSave = async () => {
-		setSelectedTest(null);
-	};
 	const handleDelete = async (test) => {
 		console.log("tu", test);
 		try {
@@ -126,7 +123,6 @@ export default function EditTestsList({ tests }) {
 				<EditModal
 					test={selectedTest}
 					onClose={handleCloseModal}
-					onSave={handleSave}
 					tests={initialTests}
 					refetch={fetchTests}
 				/>
