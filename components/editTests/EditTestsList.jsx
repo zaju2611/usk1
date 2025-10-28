@@ -47,7 +47,6 @@ export default function EditTestsList({ tests }) {
 	};
 
 	const handleDelete = async (test) => {
-		console.log("tu", test);
 		try {
 			const res = await fetch(`/api/tests/${test._id}`, {
 				method: "DELETE",
