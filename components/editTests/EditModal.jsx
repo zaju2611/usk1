@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import classes from "./EditModal.module.css";
+import Select from "react-select";
 
 export default function EditModal({ test, tests, onClose, refetch }) {
 	const [name, setName] = useState("");
@@ -56,6 +57,7 @@ export default function EditModal({ test, tests, onClose, refetch }) {
 						id="name"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
+						className={classes.fontSize}
 					/>
 
 					<label htmlFor="price">Cena:</label>
@@ -64,20 +66,23 @@ export default function EditModal({ test, tests, onClose, refetch }) {
 						type="number"
 						value={price}
 						onChange={(e) => setPrice(e.target.value)}
+						className={classes.fontSize}
 					/>
 
 					<label htmlFor="type">Kategoria:</label>
-					<select
-						id="type"
-						className={classes.select}
-						value={type}
-						onChange={(e) => setType(e.target.value)}>
-						{categories.map((cat) => (
-							<option key={cat} value={cat}>
-								{cat}
-							</option>
-						))}
-					</select>
+					<Select
+						inputId="type" // odpowiada za htmlFor="type"
+						classNamePrefix="react-select" // potrzebny do stylów
+						options={categories.map((cat) => ({ value: cat, label: cat }))}
+						value={
+							categories
+								.map((cat) => ({ value: cat, label: cat }))
+								.find((opt) => opt.value === type) || null
+						}
+						onChange={(selected) => setType(selected ? selected.value : "")}
+						placeholder="Wybierz kategorię"
+						isSearchable={false}
+					/>
 
 					<div className={classes.actions}>
 						<button type="button" onClick={onClose}>
