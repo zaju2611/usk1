@@ -173,21 +173,7 @@ export const referralTests = [
 		value: "Kwas moczowy",
 		category: "Badania biochemiczne",
 	},
-	// {
-	// 	label: "Sód",
-	// 	value: "Sód",
-	// 	category: "Badania biochemiczne",
-	// },
-	// {
-	// 	label: "Potas",
-	// 	value: "Potas",
-	// 	category: "Badania biochemiczne",
-	// },
-	// {
-	// 	label: "Chlorki",
-	// 	value: "Chlorki",
-	// 	category: "Badania biochemiczne",
-	// },
+
 	{
 		id: "6838072a4d7a43c79165684e",
 		label: "Elektrolity",

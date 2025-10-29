@@ -29,7 +29,6 @@ export default async function handler(req, res) {
 			type: String(type),
 		});
 
-		// MongoDB Driver v4+ nie ma result.ops, id jest w result.insertedId
 		const newTest = {
 			_id: result.insertedId,
 			name: String(name),

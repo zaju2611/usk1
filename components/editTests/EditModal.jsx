@@ -71,8 +71,8 @@ export default function EditModal({ test, tests, onClose, refetch }) {
 
 					<label htmlFor="type">Kategoria:</label>
 					<Select
-						inputId="type" // odpowiada za htmlFor="type"
-						classNamePrefix="react-select" // potrzebny do stylów
+						inputId="type"
+						classNamePrefix="react-select"
 						options={categories.map((cat) => ({ value: cat, label: cat }))}
 						value={
 							categories
