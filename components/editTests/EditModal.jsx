@@ -80,10 +80,10 @@ export default function EditModal({ test, tests, onClose, refetch }) {
 					</select>
 
 					<div className={classes.actions}>
-						<button type="submit">Zapisz</button>
 						<button type="button" onClick={onClose}>
 							Anuluj
 						</button>
+						<button type="submit">Zapisz</button>
 					</div>
 				</form>
 			</div>

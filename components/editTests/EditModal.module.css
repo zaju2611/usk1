@@ -49,12 +49,12 @@
 }
 
 .actions button:first-child {
-	background-color: #0070f3;
-	color: white;
+	background-color: #ccc;
 }
 
 .actions button:last-child {
-	background-color: #ccc;
+	background-color: #0070f3;
+	color: white;
 }
 
 .select {

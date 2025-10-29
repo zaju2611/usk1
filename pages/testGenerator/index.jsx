@@ -46,6 +46,7 @@ export default function TestGenerator({ tests }) {
 	};
 
 	const availableTests = tests.map((test) => ({
+		id: test._id,
 		value: test.name,
 		label: test.name,
 		price: test.price,

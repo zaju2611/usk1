@@ -1,4 +1,24 @@
 import { categories } from "../data/categories";
+
+const categoryMap = {
+	"Badania hematologiczne": "Badania hematologiczne",
+	"Hemostaza (osocze cytrynianowe)": "Hemostaza (osocze cytrynianowe)",
+	"Chemia kliniczna (surowica)": "Chemia kliniczna (surowica)",
+	"Chemia kliniczna (mocz)": "Chemia kliniczna (mocz)",
+	"Immunochemia (surowica)": "Immunochemia (surowica)",
+	"Immunochemia (osocze wersenianowe)": "Immunochemia (osocze wersenianowe)",
+	"Markery Chorób Zakaźnych": "Markery Chorób Zakaźnych",
+	"Białka specyficzne": "Białka specyficzne",
+	"Analityka ogólna": "Analityka ogólna",
+	"Płyn z jamy ciała - badania dodatkowe":
+		"Płyn z jamy ciała - badania dodatkowe",
+	"Test kasetkowy": "Test kasetkowy",
+};
+
+function mapCategory(dbCategory) {
+	const normalized = dbCategory.trim().toLowerCase();
+	return categoryMap[normalized] || dbCategory;
+}
 export default function calculateCategoryTotals(selectedTests) {
 	const categoryPriceMap = categories.reduce((map, category) => {
 		map[category.name] = category.price;
@@ -11,9 +31,13 @@ export default function calculateCategoryTotals(selectedTests) {
 	}, {});
 
 	selectedTests.forEach((test) => {
-		const { type: categoryName, price } = test;
-		if (categoryPriceMap.hasOwnProperty(categoryName)) {
-			categoryTotals[categoryName] += price;
+		const mappedCategory = mapCategory(test.type);
+		const { price } = test;
+
+		if (categoryTotals.hasOwnProperty(mappedCategory)) {
+			categoryTotals[mappedCategory] += price;
+		} else {
+			console.warn(`Nieznana kategoria: ${test.type}`);
 		}
 	});
 

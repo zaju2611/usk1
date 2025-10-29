@@ -23,12 +23,14 @@ export default function drawTest(page, test, x, y, customFont, selectedTests) {
 			y = 520;
 		}
 
-		drawTestBox(
-			page,
-			x,
-			y,
-			selectedTests.some((t) => t.value === test.value)
-		);
+		const isSelected = selectedTests.some((t) => {
+			if (t.id && test.id) return t.id === test.id;
+			if (t.value && test.value) return t.value === test.value;
+			if (t.name && test.name) return t.name === test.name;
+			return false;
+		});
+
+		drawTestBox(page, x, y, isSelected);
 		page.drawText(line, {
 			x: x + BOX_SIZE + 5,
 			y: y - BOX_SIZE / 2 - 2 - lineIndex * 7,

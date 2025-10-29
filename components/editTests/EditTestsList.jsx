@@ -73,7 +73,7 @@ export default function EditTestsList({ tests }) {
 					<tr>
 						<th>Lp.</th>
 						<th>Nazwa badania</th>
-						<th>Cena</th>
+
 						<th>Edycja</th>
 						<th>Usuń</th>
 					</tr>
@@ -97,7 +97,7 @@ export default function EditTestsList({ tests }) {
 								<tr key={test._id}>
 									<td className={classes.colLp}>{index + 1}</td>
 									<td className={classes.colName}>{test.name}</td>
-									<td className={classes.colPrice}>{test.price}</td>
+
 									<td className={classes.colEdit}>
 										<button
 											className={`${classes.iconButton} ${classes.noBorder}`}

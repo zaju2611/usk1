@@ -11,4 +11,5 @@ export const categories = [
 	{ name: "Narkotyki w moczu", price: 0 },
 	{ name: "Test kasetkowy", price: 0 },
 	{ name: "Płyn z jamy ciała - badania dodatkowe", price: 0 },
+	{ name: "Analityka ogólna", price: 0 },
 ];

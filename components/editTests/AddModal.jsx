@@ -74,6 +74,9 @@ export default function AddModal({ tests, onClose, refetch }) {
 						value={type}
 						onChange={(e) => setType(e.target.value)}
 						required>
+						<option value="" disabled hidden>
+							Wybierz kategorię
+						</option>
 						{categories.map((cat) => (
 							<option key={cat} value={cat}>
 								{cat}
@@ -82,10 +85,10 @@ export default function AddModal({ tests, onClose, refetch }) {
 					</select>
 
 					<div className={classes.actions}>
-						<button type="submit">Zapisz</button>
 						<button type="button" onClick={onClose}>
 							Anuluj
 						</button>
+						<button type="submit">Zapisz</button>
 					</div>
 				</form>
 			</div>
