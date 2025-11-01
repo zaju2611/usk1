@@ -16,9 +16,14 @@ const categoryMap = {
 };
 
 function mapCategory(dbCategory) {
+	if (!dbCategory || typeof dbCategory !== "string") {
+		return "";
+	}
+
 	const normalized = dbCategory.trim().toLowerCase();
 	return categoryMap[normalized] || dbCategory;
 }
+
 export default function calculateCategoryTotals(selectedTests) {
 	const categoryPriceMap = categories.reduce((map, category) => {
 		map[category.name] = category.price;
