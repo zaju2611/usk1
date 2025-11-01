@@ -28,8 +28,6 @@ const Form = ({
 	const [totalAmount, setTotalAmount] = useState(0);
 	const [showDownloadPopup, setShowDownloadPopup] = useState(false);
 
-	console.log(selectedTests);
-
 	const handleTestChangeInternal = (selectedOptions) => {
 		setSelectedTests(selectedOptions);
 		handleTestChange(selectedOptions);
