@@ -129,7 +129,7 @@ const Form = ({
 		if (addSampleCollection) {
 			updatedTests.push({
 				label: "Pobranie materiału",
-				price: 6,
+				price: 7,
 				value: "Pobranie materiału",
 			});
 		}

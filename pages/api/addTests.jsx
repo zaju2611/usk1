@@ -9,8 +9,14 @@ export default async function handler(req, res) {
 
 	const { name, price, type } = req.body;
 
-	if (!name || !price || !type) {
-		return res.status(422).json({ message: "Missing data" });
+	if (
+		name == null ||
+		price == null ||
+		type == null ||
+		name === "" ||
+		type === ""
+	) {
+		return res.status(400).json({ message: "Missing data" });
 	}
 
 	let client;
