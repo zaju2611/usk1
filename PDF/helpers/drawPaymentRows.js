@@ -15,7 +15,7 @@ export default function drawPaymentRows(
 	getCurrentDate
 ) {
 	const hasSampleCollection = checkSampleCollection(selectedTests);
-	const headerText = hasSampleCollection ? "+ 6 zł pobranie" : "";
+	const headerText = hasSampleCollection ? "+ 7 zł pobranie" : "";
 	page.drawText(headerText, { x: 465, y: 320, color: rgb(0, 0, 0) });
 
 	const categoryTotals = calculateCategoryTotals(selectedTests);

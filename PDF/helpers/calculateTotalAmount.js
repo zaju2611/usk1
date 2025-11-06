@@ -6,5 +6,5 @@ export default function calculateTotalAmount(
 		(total, amount) => total + amount,
 		0
 	);
-	return hasSampleCollection ? totalCategoryTotals + 6.0 : totalCategoryTotals;
+	return hasSampleCollection ? totalCategoryTotals + 7.0 : totalCategoryTotals;
 }
